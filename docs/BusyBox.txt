@@ -1,0 +1,924 @@
+NAME
+    BusyBox - The Swiss Army Knife of Embedded Linux
+
+SYNTAX
+     busybox <applet> [arguments...]  # or
+
+     <applet> [arguments...]          # if symlinked
+
+DESCRIPTION
+    BusyBox combines tiny versions of many common UNIX utilities into a
+    single small executable. It provides minimalist replacements for most of
+    the utilities you usually find in GNU coreutils, util-linux, etc. The
+    utilities in BusyBox generally have fewer options than their
+    full-featured GNU cousins; however, the options that are included
+    provide the expected functionality and behave very much like their GNU
+    counterparts.
+
+    BusyBox has been written with size-optimization and limited resources in
+    mind. It is also extremely modular so you can easily include or exclude
+    commands (or features) at compile time. This makes it easy to customize
+    your embedded systems. To create a working system, just add /dev, /etc,
+    and a Linux kernel. BusyBox provides a fairly complete POSIX environment
+    for any small or embedded system.
+
+    BusyBox is extremely configurable. This allows you to include only the
+    components you need, thereby reducing binary size. Run 'make config' or
+    'make menuconfig' to select the functionality that you wish to enable.
+    Then run 'make' to compile BusyBox using your configuration.
+
+    After the compile has finished, you should use 'make install' to install
+    BusyBox. This will install the 'bin/busybox' binary, in the target
+    directory specified by CONFIG_PREFIX. CONFIG_PREFIX can be set when
+    configuring BusyBox, or you can specify an alternative location at
+    install time (i.e., with a command line like 'make
+    CONFIG_PREFIX=/tmp/foo install'). If you enabled any applet installation
+    scheme (either as symlinks or hardlinks), these will also be installed
+    in the location pointed to by CONFIG_PREFIX.
+
+USAGE
+    BusyBox is a multi-call binary. A multi-call binary is an executable
+    program that performs the same job as more than one utility program.
+    That means there is just a single BusyBox binary, but that single binary
+    acts like a large number of utilities. This allows BusyBox to be smaller
+    since all the built-in utility programs (we call them applets) can share
+    code for many common operations.
+
+    You can also invoke BusyBox by issuing a command as an argument on the
+    command line. For example, entering
+
+            /bin/busybox ls
+
+    will also cause BusyBox to behave as 'ls'.
+
+    Of course, adding '/bin/busybox' into every command would be painful. So
+    most people will invoke BusyBox using links to the BusyBox binary.
+
+    For example, entering
+
+            ln -s /bin/busybox ls
+            ./ls
+
+    will cause BusyBox to behave as 'ls' (if the 'ls' command has been
+    compiled into BusyBox). Generally speaking, you should never need to
+    make all these links yourself, as the BusyBox build system will do this
+    for you when you run the 'make install' command.
+
+    If you invoke BusyBox with no arguments, it will provide you with a list
+    of the applets that have been compiled into your BusyBox binary.
+
+COMMON OPTIONS
+    Most BusyBox applets support the --help argument to provide a terse
+    runtime description of their behavior. If the
+    CONFIG_FEATURE_VERBOSE_USAGE option has been enabled, more detailed
+    usage information will also be available.
+
+COMMANDS
+    Currently available applets include:
+
+            [, [[, acpid, arp, ash, base64, basename, beep, blkid, blockdev,
+            bootchartd, brctl, bzip2, cal, cat, catv, chat, chgrp, chmod, chown,
+            chroot, cksum, clear, comm, conspy, cp, cttyhack, cut, date, dd,
+            depmod, devmem, df, dhcprelay, dirname, dmesg, dnsdomainname, du,
+            dumpleases, echo, egrep, env, expr, false, fatattr, fbsplash, fdisk,
+            fgconsole, fgrep, find, findfs, flock, free, fsck, fstrim, fsync,
+            ftpd, getopt, getty, grep, groups, gunzip, halt, hd, head, hexdump,
+            hostname, hwclock, i2cdetect, i2cdump, i2cget, i2cset, id, ifconfig,
+            ifenslave, ifplugd, inetd, init, insmod, iostat, ip, ipaddr, iplink,
+            iproute, iprule, iptunnel, kbd_mode, kill, killall, less, linuxrc,
+            ln, login, lpd, lpq, lpr, ls, lsmod, lsof, lspci, lsusb, lzop,
+            lzopcat, makemime, man, md5sum, mdev, microcom, mkdir, mkdosfs,
+            mke2fs, mkfifo, mkfs.ext2, mkfs.vfat, mknod, mktemp, modinfo,
+            modprobe, more, mount, mpstat, mv, mvtime, nbd-client, netstat,
+            nice, nohup, nslookup, ntpd, pgrep, ping, ping6, pivot_root, pkill,
+            pmap, popmaildir, poweroff, powertop, printenv, printf, ps, pscan,
+            pstree, pwd, pwdx, rdev, readahead, reboot, reformime, rev, rm,
+            rmdir, rmmod, route, rtcwake, run-parts, rx, script, scriptreplay,
+            sed, sendmail, setconsole, setfont, setlogcons, setserial, setsid,
+            sh, sha1sum, sha256sum, sha3sum, sha512sum, showkey, shuf, sleep,
+            smemcap, split, stat, stty, sum, sync, tac, tail, tar, tee, telnetd,
+            test, tftp, tftpd, time, timeout, top, tr, traceroute, traceroute6,
+            true, truncate, tty, tunctl, udhcpc, udhcpd, uevent, umount, uname,
+            unlink, unlzop, unxz, unzip, uptime, usleep, uudecode, uuencode, vi,
+            volname, wget, which, whois, xargs, xz, xzcat, zcat
+
+COMMAND DESCRIPTIONS
+    acpid
+        acpid [-df] [-c CONFDIR] [-l LOGFILE] [-a ACTIONFILE] [-M MAPFILE]
+        [-e PROC_EVENT_FILE] [-p PIDFILE]
+
+    arp arp [-vn] [-H HWTYPE] [-i IF] -a [HOSTNAME] [-v] [-i IF] -d HOSTNAME
+        [pub] [-v] [-H HWTYPE] [-i IF] -s HOSTNAME HWADDR [temp] [-v] [-H
+        HWTYPE] [-i IF] -s HOSTNAME HWADDR [netmask MASK] pub [-v] [-H
+        HWTYPE] [-i IF] -Ds HOSTNAME IFACE [netmask MASK] pub
+
+    ash ash [-/+OPTIONS] [-/+o OPT]... [-c 'SCRIPT' [ARG0 [ARGS]] / FILE
+        [ARGS]]
+
+    base64
+        base64 [-d] [FILE]
+
+    basename
+        basename FILE [SUFFIX]
+
+    beep
+        beep -f FREQ -l LEN -d DELAY -r COUNT -n
+
+    blkid
+        blkid [BLOCKDEV]...
+
+    blockdev
+        blockdev OPTION BLOCKDEV
+
+    bootchartd
+        bootchartd start [PROG ARGS]|stop|init
+
+    brctl
+        brctl COMMAND [BRIDGE [INTERFACE]]
+
+    bzip2
+        bzip2 [OPTIONS] [FILE]...
+
+    cal cal [-jy] [[MONTH] YEAR]
+
+    cat cat [FILE]...
+
+    catv
+        catv [-etv] [FILE]...
+
+    chat
+        chat EXPECT [SEND [EXPECT [SEND...]]]
+
+    chgrp
+        chgrp [-RhLHP]... GROUP FILE...
+
+    chmod
+        chmod [-R] MODE[,MODE]... FILE...
+
+    chown
+        chown [-Rh]... OWNER[<.|:>[GROUP]] FILE...
+
+    chroot
+        chroot NEWROOT [PROG ARGS]
+
+    cksum
+        cksum FILES...
+
+    clear
+        clear
+
+    comm
+        comm [-123] FILE1 FILE2
+
+    conspy
+        conspy [-vcsndfFQ] [-x COL] [-y LINE] [CONSOLE_NO]
+
+    cp  cp [OPTIONS] SOURCE... DEST
+
+    cttyhack
+        cttyhack [PROG ARGS]
+
+    cut cut [OPTIONS] [FILE]...
+
+    date
+        date [OPTIONS] [+FMT] [TIME]
+
+    dd  dd [if=FILE] [of=FILE] [ibs=N] [obs=N] [bs=N] [count=N] [skip=N]
+        [seek=N] [conv=notrunc|noerror|sync|fsync]
+
+    devmem
+        devmem ADDRESS [WIDTH [VALUE]]
+
+    df  df [-PkTai] [-B SIZE] [FILESYSTEM]...
+
+    dhcprelay
+        dhcprelay CLIENT_IFACE[,CLIENT_IFACE2]... SERVER_IFACE [SERVER_IP]
+
+    dirname
+        dirname FILENAME
+
+    dmesg
+        dmesg [-c] [-n LEVEL] [-s SIZE]
+
+    du  du [-aHLdclsxk] [FILE]...
+
+    dumpleases
+        dumpleases [-r|-a] [-f LEASEFILE]
+
+    echo
+        echo [-neE] [ARG]...
+
+    env env [-iu] [-] [name=value]... [PROG ARGS]
+
+    expr
+        expr EXPRESSION
+
+    fatattr
+        fatattr [-+rhsvda] FILE...
+
+    fbsplash
+        fbsplash -s IMGFILE [-c] [-d DEV] [-i INIFILE] [-f CMD]
+
+    fdisk
+        fdisk [-ul] [-C CYLINDERS] [-H HEADS] [-S SECTORS] [-b SSZ] DISK
+
+    fgconsole
+        fgconsole
+
+    find
+        find [-HL] [PATH]... [OPTIONS] [ACTIONS]
+
+    findfs
+        findfs LABEL=label or UUID=uuid
+
+    flock
+        flock [-sxun] FD|{FILE [-c] PROG ARGS}
+
+    free
+        free
+
+    fsck
+        fsck [-ANPRTV] [-C FD] [-t FSTYPE] [FS_OPTS] [BLOCKDEV]...
+
+    fstrim
+        fstrim [OPTIONS] MOUNTPOINT
+
+    fsync
+        fsync [-d] FILE...
+
+    ftpd
+        ftpd [-wvS] [-t N] [-T N] [DIR]
+
+    getopt
+        getopt [OPTIONS] [--] OPTSTRING PARAMS
+
+    getty
+        getty [OPTIONS] BAUD_RATE[,BAUD_RATE]... TTY [TERMTYPE]
+
+    grep
+        grep [-HhnlLoqvsriwFE] [-m N] PATTERN/-e PATTERN.../-f FILE
+        [FILE]...
+
+    groups
+        groups [USER]
+
+    gunzip
+        gunzip [-cft] [FILE]...
+
+    halt
+        halt [-d DELAY] [-n] [-f]
+
+    hd  hd FILE...
+
+    head
+        head [OPTIONS] [FILE]...
+
+    hexdump
+        hexdump [-bcCdefnosvxR] [FILE]...
+
+    hostname
+        hostname [OPTIONS] [HOSTNAME | -F FILE]
+
+    hwclock
+        hwclock [-r|--show] [-s|--hctosys] [-w|--systohc] [-t|--systz]
+        [-l|--localtime] [-u|--utc] [-f|--rtc FILE]
+
+    i2cdetect
+        i2cdetect [-F I2CBUS] [-l] [-y] [-a] [-q|-r] I2CBUS [FIRST LAST]
+
+    i2cdump
+        i2cdump [-f] [-r FIRST-LAST] [-y] BUS ADDR [MODE]
+
+    i2cget
+        i2cget [-f] [-y] BUS CHIP-ADDRESS [DATA-ADDRESS [MODE]]
+
+    i2cset
+        i2cset [-f] [-y] [-m MASK] BUS CHIP-ADDR DATA-ADDR [VALUE] ...
+        [MODE]
+
+    id  id [OPTIONS] [USER]
+
+    ifconfig
+        ifconfig [-a] interface [address]
+
+    ifenslave
+        ifenslave [-cdf] MASTER_IFACE SLAVE_IFACE...
+
+    ifplugd
+        ifplugd [OPTIONS]
+
+    inetd
+        inetd [-fe] [-q N] [-R N] [CONFFILE]
+
+    init
+        init
+
+    insmod
+        insmod FILE [SYMBOL=VALUE]...
+
+    iostat
+        iostat [-c] [-d] [-t] [-z] [-k|-m] [ALL|BLOCKDEV...] [INTERVAL
+        [COUNT]]
+
+    ip  ip [OPTIONS] {address | route | link | tunnel | rule} {COMMAND}
+
+    ipaddr
+        ipaddr { {add|del} IFADDR dev STRING | {show|flush} [dev STRING] [to
+        PREFIX] }
+
+    iplink
+        iplink { set DEVICE { up | down | arp { on | off } | show [DEVICE] }
+
+    iproute
+        iproute { list | flush | add | del | change | append | replace |
+        test } ROUTE
+
+    iprule
+        iprule {[list | add | del] RULE}
+
+    iptunnel
+        iptunnel { add | change | del | show } [NAME] [mode { ipip | gre |
+        sit }] [remote ADDR] [local ADDR] [ttl TTL]
+
+    kbd_mode
+        kbd_mode [-a|k|s|u] [-C TTY]
+
+    kill
+        kill [-l] [-SIG] PID...
+
+    killall
+        killall [-l] [-q] [-SIG] PROCESS_NAME...
+
+    less
+        less [-EIMmNSh~] [FILE]...
+
+    ln  ln [OPTIONS] TARGET... LINK|DIR
+
+    login
+        login [-p] [-h HOST] [[-f] USER]
+
+    lpd lpd SPOOLDIR [HELPER [ARGS]]
+
+    lpq lpq [-P queue[@host[:port]]] [-U USERNAME] [-d JOBID]... [-fs]
+
+    lpr lpr -P queue[@host[:port]] -U USERNAME -J TITLE -Vmh [FILE]...
+
+    ls  ls [-1AaCxdLHFplinserSXvctu] [-w WIDTH] [FILE]...
+
+    lsmod
+        lsmod
+
+    lsof
+        lsof
+
+    lspci
+        lspci [-mk]
+
+    lzop
+        lzop [-cfvd123456789CF] [FILE]...
+
+    lzopcat
+        lzopcat [-vCF] [FILE]...
+
+    makemime
+        makemime [OPTIONS] [FILE]...
+
+    man man [-aw] [MANPAGE]...
+
+    md5sum
+        md5sum [FILE]...
+
+    mdev
+        mdev [-s]
+
+    microcom
+        microcom [-d DELAY] [-t TIMEOUT] [-s SPEED] [-X] TTY
+
+    mkdir
+        mkdir [OPTIONS] DIRECTORY...
+
+    mkdosfs
+        mkdosfs [-v] [-n LABEL] BLOCKDEV [KBYTES]
+
+    mke2fs
+        mke2fs [-Fn] [-b BLK_SIZE] [-i INODE_RATIO] [-I INODE_SIZE] [-m
+        RESERVED_PERCENT] [-L LABEL] BLOCKDEV [KBYTES]
+
+    mkfifo
+        mkfifo [-m MODE] NAME
+
+    mkfs.ext2
+        mkfs.ext2 [-Fn] [-b BLK_SIZE] [-i INODE_RATIO] [-I INODE_SIZE] [-m
+        RESERVED_PERCENT] [-L LABEL] BLOCKDEV [KBYTES]
+
+    mkfs.vfat
+        mkfs.vfat [-v] [-n LABEL] BLOCKDEV [KBYTES]
+
+    mknod
+        mknod [-m MODE] NAME TYPE MAJOR MINOR
+
+    mktemp
+        mktemp [-dt] [-p DIR] [TEMPLATE]
+
+    modinfo
+        modinfo [-adlp0] [-F keyword] MODULE
+
+    modprobe
+        modprobe [-qfwrsv] MODULE [SYMBOL=VALUE]...
+
+    more
+        more [FILE]...
+
+    mount
+        mount [OPTIONS] [-o OPT] DEVICE NODE
+
+    mpstat
+        mpstat [-A] [-I SUM|CPU|ALL|SCPU] [-u] [-P num|ALL] [INTERVAL
+        [COUNT]]
+
+    mv  mv [-fin] SOURCE DEST or: mv [-fin] SOURCE... DIRECTORY
+
+    mvtime
+        mvtime mvtime returns time since boot
+
+    nbd-client
+        nbd-client HOST PORT BLOCKDEV
+
+    netstat
+        netstat [-ral] [-tuwx] [-enp]
+
+    nice
+        nice [-n ADJUST] [PROG ARGS]
+
+    nohup
+        nohup PROG ARGS
+
+    nslookup
+        nslookup [HOST] [SERVER]
+
+    ntpd
+        ntpd [-dnqNwl -I IFACE] [-S PROG] [-p PEER]...
+
+    pgrep
+        pgrep [-flnovx] [-s SID|-P PPID|PATTERN]
+
+    ping
+        ping HOST
+
+    ping6
+        ping6 HOST
+
+    pivot_root
+        pivot_root NEW_ROOT PUT_OLD
+
+    pkill
+        pkill [-l|-SIGNAL] [-fnovx] [-s SID|-P PPID|PATTERN]
+
+    pmap
+        pmap [-xq] PID
+
+    popmaildir
+        popmaildir [OPTIONS] MAILDIR [CONN_HELPER ARGS]
+
+    poweroff
+        poweroff [-d DELAY] [-n] [-f]
+
+    powertop
+        powertop
+
+    printenv
+        printenv [VARIABLE]...
+
+    printf
+        printf FORMAT [ARG]...
+
+    ps  ps
+
+    pscan
+        pscan [-cb] [-p MIN_PORT] [-P MAX_PORT] [-t TIMEOUT] [-T MIN_RTT]
+        HOST
+
+    pstree
+        pstree [-p] [PID|USER]
+
+    pwd pwd
+
+    pwdx
+        pwdx PID...
+
+    rdev
+        rdev
+
+    readahead
+        readahead [FILE]...
+
+    reboot
+        reboot [-d DELAY] [-n] [-f]
+
+    reformime
+        reformime [OPTIONS]
+
+    rev rev [FILE]...
+
+    rm  rm [-irf] FILE...
+
+    rmdir
+        rmdir [OPTIONS] DIRECTORY...
+
+    rmmod
+        rmmod [-wfa] [MODULE]...
+
+    route
+        route [{add|del|delete}]
+
+    rtcwake
+        rtcwake [-a | -l | -u] [-d DEV] [-m MODE] [-s SEC | -t TIME]
+
+    run-parts
+        run-parts [-a ARG]... [-u UMASK] [--reverse] [--test]
+        [--exit-on-error] [--list] DIRECTORY
+
+    rx  rx FILE
+
+    script
+        script [-afqt] [-c PROG] [OUTFILE]
+
+    scriptreplay
+        scriptreplay timingfile [typescript [divisor]]
+
+    sed sed [-inrE] [-f FILE]... [-e CMD]... [FILE]... or: sed [-inrE] CMD
+        [FILE]...
+
+    sendmail
+        sendmail [OPTIONS] [RECIPIENT_EMAIL]...
+
+    setconsole
+        setconsole [-r] [DEVICE]
+
+    setfont
+        setfont FONT [-m MAPFILE] [-C TTY]
+
+    setlogcons
+        setlogcons [N]
+
+    setserial
+        setserial [-gabGvzV] DEVICE [PARAMETER [ARG]]...
+
+    setsid
+        setsid PROG ARGS
+
+    sh  sh [-/+OPTIONS] [-/+o OPT]... [-c 'SCRIPT' [ARG0 [ARGS]] / FILE
+        [ARGS]]
+
+    sha1sum
+        sha1sum [FILE]...
+
+    sha256sum
+        sha256sum [FILE]...
+
+    sha3sum
+        sha3sum [FILE]...
+
+    sha512sum
+        sha512sum [FILE]...
+
+    showkey
+        showkey [-a | -k | -s]
+
+    shuf
+        shuf [-e|-i L-H] [-n NUM] [-o FILE] [-z] [FILE|ARG...]
+
+    sleep
+        sleep N
+
+    smemcap
+        smemcap >SMEMDATA.TAR
+
+    split
+        split [OPTIONS] [INPUT [PREFIX]]
+
+    stat
+        stat [OPTIONS] FILE...
+
+    stty
+        stty [-a|g] [-F DEVICE] [SETTING]...
+
+    sum sum [-rs] [FILE]...
+
+    sync
+        sync
+
+    tac tac [FILE]...
+
+    tail
+        tail [OPTIONS] [FILE]...
+
+    tar tar -[cxtzJjahmvO] [-f TARFILE] [-C DIR] [FILE]...
+
+    tee tee [-ai] [FILE]...
+
+    telnetd
+        telnetd [OPTIONS]
+
+    tftp
+        tftp [OPTIONS] HOST [PORT]
+
+    tftpd
+        tftpd [-cr] [-u USER] [DIR]
+
+    time
+        time [-v] PROG ARGS
+
+    timeout
+        timeout [-t SECS] [-s SIG] PROG ARGS
+
+    top top [-b] [-nCOUNT] [-dSECONDS] [-m]
+
+    tr  tr [-cds] STRING1 [STRING2]
+
+    traceroute
+        traceroute [-46FIlnrv] [-f 1ST_TTL] [-m MAXTTL] [-q PROBES] [-p
+        PORT] [-t TOS] [-w WAIT_SEC] [-s SRC_IP] [-i IFACE] [-z PAUSE_MSEC]
+        HOST [BYTES]
+
+    traceroute6
+        traceroute6 [-nrv] [-m MAXTTL] [-q PROBES] [-p PORT] [-t TOS] [-w
+        WAIT_SEC] [-s SRC_IP] [-i IFACE] HOST [BYTES]
+
+    truncate
+        truncate [-c] -s SIZE FILE...
+
+    tty tty
+
+    tunctl
+        tunctl [-f device] ([-t name] | -d name) [-u owner] [-g group] [-b]
+
+    udhcpc
+        udhcpc [-fbqvRB] [-a[MSEC]] [-t N] [-T SEC] [-A SEC/-n] [-i IFACE]
+        [-s PROG] [-p PIDFILE] [-oC] [-r IP] [-V VENDOR] [-F NAME] [-x
+        OPT:VAL]... [-O OPT]...
+
+    udhcpd
+        udhcpd [-fS] [-I ADDR] [CONFFILE]
+
+    uevent
+        uevent [PROG [ARGS]]
+
+    umount
+        umount [OPTIONS] FILESYSTEM|DIRECTORY
+
+    uname
+        uname [-amnrspvio]
+
+    unlink
+        unlink FILE
+
+    unlzop
+        unlzop [-cfvCF] [FILE]...
+
+    unxz
+        unxz [-cf] [FILE]...
+
+    unzip
+        unzip [-lnopq] FILE[.zip] [FILE]... [-x FILE...] [-d DIR]
+
+    uptime
+        uptime
+
+    usleep
+        usleep N
+
+    uudecode
+        uudecode [-o OUTFILE] [INFILE]
+
+    uuencode
+        uuencode [-m] [FILE] STORED_FILENAME
+
+    vi  vi [OPTIONS] [FILE]...
+
+    volname
+        volname [DEVICE]
+
+    wget
+        wget [-csq] [-O FILE] [-Y on/off] [-P DIR] [-U AGENT] [-T SEC]
+        URL...
+
+    which
+        which [COMMAND]...
+
+    whois
+        whois [-h SERVER] [-p PORT] NAME...
+
+    xargs
+        xargs [OPTIONS] [PROG ARGS]
+
+    xz  xz -d [-cf] [FILE]...
+
+    xzcat
+        xzcat [FILE]...
+
+    zcat
+        zcat [FILE]...
+
+LIBC NSS
+    GNU Libc (glibc) uses the Name Service Switch (NSS) to configure the
+    behavior of the C library for the local environment, and to configure
+    how it reads system data, such as passwords and group information. This
+    is implemented using an /etc/nsswitch.conf configuration file, and using
+    one or more of the /lib/libnss_* libraries. BusyBox tries to avoid using
+    any libc calls that make use of NSS. Some applets however, such as login
+    and su, will use libc functions that require NSS.
+
+    If you enable CONFIG_USE_BB_PWD_GRP, BusyBox will use internal functions
+    to directly access the /etc/passwd, /etc/group, and /etc/shadow files
+    without using NSS. This may allow you to run your system without the
+    need for installing any of the NSS configuration files and libraries.
+
+    When used with glibc, the BusyBox 'networking' applets will similarly
+    require that you install at least some of the glibc NSS stuff (in
+    particular, /etc/nsswitch.conf, /lib/libnss_dns*, /lib/libnss_files*,
+    and /lib/libresolv*).
+
+    Shameless Plug: As an alternative, one could use a C library such as
+    uClibc. In addition to making your system significantly smaller, uClibc
+    does not require the use of any NSS support files or libraries.
+
+MAINTAINER
+    Denis Vlasenko <vda.linux@googlemail.com>
+
+AUTHORS
+    The following people have contributed code to BusyBox whether they know
+    it or not. If you have written code included in BusyBox, you should
+    probably be listed here so you can obtain your bit of eternal glory. If
+    you should be listed here, or the description of what you have done
+    needs more detail, or is incorrect, please send in an update.
+
+    Emanuele Aina <emanuele.aina@tiscali.it> run-parts
+
+    Erik Andersen <andersen@codepoet.org>
+
+        Tons of new stuff, major rewrite of most of the
+        core apps, tons of new apps as noted in header files.
+        Lots of tedious effort writing these boring docs that
+        nobody is going to actually read.
+
+    Laurence Anderson <l.d.anderson@warwick.ac.uk>
+
+        rpm2cpio, unzip, get_header_cpio, read_gz interface, rpm
+
+    Jeff Angielski <jeff@theptrgroup.com>
+
+        ftpput, ftpget
+
+    Edward Betts <edward@debian.org>
+
+        expr, hostid, logname, whoami
+
+    John Beppu <beppu@codepoet.org>
+
+        du, nslookup, sort
+
+    Brian Candler <B.Candler@pobox.com>
+
+        tiny-ls(ls)
+
+    Randolph Chung <tausq@debian.org>
+
+        fbset, ping, hostname
+
+    Dave Cinege <dcinege@psychosis.com>
+
+        more(v2), makedevs, dutmp, modularization, auto links file,
+        various fixes, Linux Router Project maintenance
+
+    Jordan Crouse <jordan@cosmicpenguin.net>
+
+        ipcalc
+
+    Magnus Damm <damm@opensource.se>
+
+        tftp client insmod powerpc support
+
+    Larry Doolittle <ldoolitt@recycle.lbl.gov>
+
+        pristine source directory compilation, lots of patches and fixes.
+
+    Glenn Engel <glenne@engel.org>
+
+        httpd
+
+    Gennady Feldman <gfeldman@gena01.com>
+
+        Sysklogd (single threaded syslogd, IPC Circular buffer support,
+        logread), various fixes.
+
+    Karl M. Hegbloom <karlheg@debian.org>
+
+        cp_mv.c, the test suite, various fixes to utility.c, &c.
+
+    Daniel Jacobowitz <dan@debian.org>
+
+        mktemp.c
+
+    Matt Kraai <kraai@alumni.cmu.edu>
+
+        documentation, bugfixes, test suite
+
+    Stephan Linz <linz@li-pro.net>
+
+        ipcalc, Red Hat equivalence
+
+    John Lombardo <john@deltanet.com>
+
+        tr
+
+    Glenn McGrath <bug1@iinet.net.au>
+
+        Common unarchiving code and unarchiving applets, ifupdown, ftpgetput,
+        nameif, sed, patch, fold, install, uudecode.
+        Various bugfixes, review and apply numerous patches.
+
+    Manuel Novoa III <mjn3@codepoet.org>
+
+        cat, head, mkfifo, mknod, rmdir, sleep, tee, tty, uniq, usleep, wc, yes,
+        mesg, vconfig, make_directory, parse_mode, dirname, mode_string,
+        get_last_path_component, simplify_path, and a number trivial libbb routines
+
+        also bug fixes, partial rewrites, and size optimizations in
+        ash, basename, cal, cmp, cp, df, du, echo, env, ln, logname, md5sum, mkdir,
+        mv, realpath, rm, sort, tail, touch, uname, watch, arith, human_readable,
+        interface, dutmp, ifconfig, route
+
+    Vladimir Oleynik <dzo@simtreas.ru>
+
+        cmdedit; xargs(current), httpd(current);
+        ports: ash, crond, fdisk, inetd, stty, traceroute, top;
+        locale, various fixes
+        and irreconcilable critic of everything not perfect.
+
+    Bruce Perens <bruce@pixar.com>
+
+        Original author of BusyBox in 1995, 1996. Some of his code can
+        still be found hiding here and there...
+
+    Tim Riker <Tim@Rikers.org>
+
+        bug fixes, member of fan club
+
+    Kent Robotti <robotti@metconnect.com>
+
+        reset, tons and tons of bug reports and patches.
+
+    Chip Rosenthal <chip@unicom.com>, <crosenth@covad.com>
+
+        wget - Contributed by permission of Covad Communications
+
+    Pavel Roskin <proski@gnu.org>
+
+        Lots of bugs fixes and patches.
+
+    Gyepi Sam <gyepi@praxis-sw.com>
+
+        Remote logging feature for syslogd
+
+    Linus Torvalds <torvalds@transmeta.com>
+
+        mkswap, fsck.minix, mkfs.minix
+
+    Mark Whitley <markw@codepoet.org>
+
+        grep, sed, cut, xargs(previous),
+        style-guide, new-applet-HOWTO, bug fixes, etc.
+
+    Charles P. Wright <cpwright@villagenet.com>
+
+        gzip, mini-netcat(nc)
+
+    Enrique Zanardi <ezanardi@ull.es>
+
+        tarcat (since removed), loadkmap, various fixes, Debian maintenance
+
+    Tito Ragusa <farmatito@tiscali.it>
+
+        devfsd and size optimizations in strings, openvt and deallocvt.
+
+    Paul Fox <pgf@foxharp.boston.ma.us>
+
+        vi editing mode for ash, various other patches/fixes
+
+    Roberto A. Foglietta <me@roberto.foglietta.name>
+
+        port: dnsd
+
+    Bernhard Reutner-Fischer <rep.dot.nop@gmail.com>
+
+        misc
+
+    Mike Frysinger <vapier@gentoo.org>
+
+        initial e2fsprogs, printenv, setarch, sum, misc
+
+    Jie Zhang <jie.zhang@analog.com>
+
+        fixed two bugs in msh and hush (exitcode of killed processes)
+
